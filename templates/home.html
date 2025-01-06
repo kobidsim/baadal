@@ -24,7 +24,29 @@
         let uploadBox = document.getElementsByClassName("upload-box")[0]
         let dropHandler = (e) => {
             e.preventDefault()
-            console.log("files dropped!!!!")
+            console.log("file:", e.dataTransfer.items)
+
+            console.log("type: ", [...e.dataTransfer.items])
+
+
+            if (e.dataTransfer.items) {
+                [...e.dataTransfer.items].forEach((item, i) => {
+                    // If dropped items aren't files, reject them
+                    if (item.kind === "file") {
+                        const file = item.getAsFile();
+                        console.log(`… file[${i}].name = ${file.name}`);
+                    }
+                });
+            } else {
+                console.log("does not exist")
+            }
+            // e.dataTransfer.items.forEach((item, i) => {
+            //     // If dropped items aren't files, reject them
+            //     if (item.kind === "file") {
+            //         const file = item.getAsFile();
+            //         console.log(`… file[${i}].name = ${file.name}`);
+            //     }
+            // });
 
             
         }
