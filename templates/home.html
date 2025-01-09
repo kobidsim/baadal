@@ -24,31 +24,28 @@
         let uploadBox = document.getElementsByClassName("upload-box")[0]
         let dropHandler = (e) => {
             e.preventDefault()
-            console.log("file:", e.dataTransfer.items)
-
-            console.log("type: ", [...e.dataTransfer.items])
-
+            let formData = new FormData()
 
             if (e.dataTransfer.items) {
                 [...e.dataTransfer.items].forEach((item, i) => {
                     // If dropped items aren't files, reject them
                     if (item.kind === "file") {
                         const file = item.getAsFile();
-                        console.log(`… file[${i}].name = ${file.name}`);
+                        formData.append('files', file)
                     }
                 });
             } else {
                 console.log("does not exist")
+                alert("no file found")
             }
-            // e.dataTransfer.items.forEach((item, i) => {
-            //     // If dropped items aren't files, reject them
-            //     if (item.kind === "file") {
-            //         const file = item.getAsFile();
-            //         console.log(`… file[${i}].name = ${file.name}`);
-            //     }
-            // });
 
-            
+            fetch("http://localhost:8080/upload", {
+                method: 'POST',
+                body: formData,
+            })
+            .then((response) => response.json())
+            .then((data) => console.log(data))
+            .catch((error) => console.log("Error: ", error));
         }
 
         let dragoverHandler = (e) => {
